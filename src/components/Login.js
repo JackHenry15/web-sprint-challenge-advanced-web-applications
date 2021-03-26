@@ -1,28 +1,76 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { axiosWithAuth } from "../helpers/axiosWithAuth";
 
-const Login = () => {
+
+class Login extends React.Component {
+
+  state = {
+    credentials: {
+      username: '',
+      password: ''
+    },
+    error: ''
+  };
+
+    handleChange = e => {
+      this.setState({
+        credentials: {
+          ...this.state.credentials,
+          [e.target.name]: e.target.value
+        }
+      });
+    };
+
+    
+
+    login = e => {
+      e.preventDefault();
+      axiosWithAuth()
+        .post('http://localhost:5000/api/login', this.state.credentials)
+      .then(res =>{
+        localStorage.setItem('token', res.data.payload);
+        this.history.push('/protected')
+      })
+      .catch(err=>{
+        console.log(err.response.data.error);
+        this.setState({ error: "Username or Password not valid." });
+      })
+    };
+
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
 
-  useEffect(()=>{
-    // make a post request to retrieve a token from the api
-    // when you have handled the token, navigate to the BubblePage route
-  });
   
-  const error = "";
-  //replace with error state
+  render() {
+    return (
+      <div>
+        <h1>Welcome to the Bubble App!</h1>
+        <div data-testid="loginForm" className="login-form">
+          <h2>Build login form here</h2>
+          <form onSubmit={this.login}>
+            <input
+              type="text"
+              name="username"
+              value={this.state.credentials.username}
+              onChange={this.handleChange}
+              data-testid="username"
+            />
+            <input
+              type="password"
+              name="password"
+              value={this.state.credentials.password}
+              onChange={this.handleChange}
+              data-testid="password"
+            />
+            <button>Log in</button>
+          </form>
+        </div>
 
-  return (
-    <div>
-      <h1>Welcome to the Bubble App!</h1>
-      <div data-testid="loginForm" className="login-form">
-        <h2>Build login form here</h2>
+        <p data-testid="errorMessage" className="error">{this.state.error}</p>
       </div>
-
-      <p data-testid="errorMessage" className="error">{error}</p>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default Login;
 
