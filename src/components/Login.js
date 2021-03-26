@@ -29,10 +29,10 @@ class Login extends React.Component {
         .post('http://localhost:5000/api/login', this.state.credentials)
       .then(res =>{
         localStorage.setItem('token', res.data.payload);
-        this.history.push('/protected')
+        this.props.history.push('/colors')
+        this.setState({ error: "" });
       })
       .catch(err=>{
-        console.log(err.response.data.error);
         this.setState({ error: "Username or Password not valid." });
       })
     };

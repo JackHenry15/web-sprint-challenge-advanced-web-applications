@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+
+import Color from "./Color"
+import EditMenu from "./EditMenu"
 
 const initialColor = {
   color: "",
@@ -9,6 +12,7 @@ const initialColor = {
 const ColorList = ({ colors, updateColors }) => {
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+
 
   const editColor = color => {
     setEditing(true);
