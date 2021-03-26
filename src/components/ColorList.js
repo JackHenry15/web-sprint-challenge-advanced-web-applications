@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams, useHistory } from 'react-router-dom';
 import axios from "axios";
 
 import Color from "./Color"
@@ -12,7 +13,8 @@ const initialColor = {
 const ColorList = ({ colors, updateColors }) => {
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
-
+  const { id } = useParams();
+  const { push } = useHistory();
 
   const editColor = color => {
     setEditing(true);
@@ -21,10 +23,18 @@ const ColorList = ({ colors, updateColors }) => {
 
   const saveEdit = e => {
     e.preventDefault();
-
+    axios.put(`http://localhost:5000/api/colors/${id}`, editColor)
+    .then((res)=>{
+      editColor.updateColors(res.data);
+      push(`/colors/${id}`);
+    })
+    .catch(err=>{
+      console.log(err);
+    })
   };
 
   const deleteColor = color => {
+    updateColors(colors.filter(color=>(color.id !== Number(id))));
   };
 
   return (
