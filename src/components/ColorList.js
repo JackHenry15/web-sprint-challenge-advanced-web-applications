@@ -23,9 +23,9 @@ const ColorList = ({ colors, updateColors }) => {
 
   const saveEdit = e => {
     e.preventDefault();
-    axios.put(`http://localhost:5000/api/colors/${id}`, editColor)
+    axios.put(`http://localhost:5000/api/colors/${id}`, colorToEdit)
     .then((res)=>{
-      editColor.updateColors(res.data);
+      updateColors(res.data);
       push(`/colors/${id}`);
     })
     .catch(err=>{
